@@ -57,7 +57,7 @@ echo -e "\033[31;1mWARNING\033[0m You may immediately lose connection to host!"
 echo "ping $STATIC_IP to verify interface is UP and that process has completed succesfully."
 echo "Goodbye"
 
-sudo remove_connection "$INTERFACE"
+remove_connection "$INTERFACE"
 sudo nmcli con up "static-$INTERFACE" iface "$INTERFACE"
 sudo systemctl restart ssh
 
