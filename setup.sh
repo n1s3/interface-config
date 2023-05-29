@@ -2,6 +2,12 @@
 
 set -e
 
+if [ $(id -u) -ne 0 ]; then
+    echo "Root privledges are required."
+    echo "You must run this script as root."
+    exit 1
+fi
+
 INTERFACE="eth1"
 SSH_PORT=23
 # specify in cidr notation
