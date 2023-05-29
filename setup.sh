@@ -59,7 +59,7 @@ if [ -n "$DO_SSH_CONF" ]; then
 fi
 
 echo "Restarting ssh, Removing previous connection and bringing static connection up..."
-echo "You may immediately lose connection to host."
+echo "\033[31;1mWARNING\033[0m You may immediately lose connection to host!"
 echo "ping $STATIC_IP to verify interface is UP and that process has completed succesfully."
 echo "Goodbye"
 
