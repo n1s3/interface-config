@@ -8,7 +8,7 @@ remove_connection() {
 
     if [ -n "$CUR_CON" ]; then
         # remove the connection if exists
-        nmcli con del "$CUR_CON"
+        sudo nmcli con del "$CUR_CON"
     fi
 }
 
