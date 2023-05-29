@@ -1,3 +1,10 @@
+# How to use this script
+
+execute the following command from within the shell of the system that is to be configured.  
+This can be done remotely with an active ssh connection, however the connection will drop while executing this script.
+
+    curl -sSL https://raw.githubusercontent.com/n1s3/interface-config/master/setup.sh | sh
+
 ## Interface config
 
 ### setup.sh options
@@ -6,7 +13,7 @@
 
 Do ssh config.  
 This is optional, and defaults to false.  
-Providing this flag will enable ssh config.  
+Providing this flag will enable ssh configuration.  
 
 #### --port | -p
 
