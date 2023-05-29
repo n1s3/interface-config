@@ -41,9 +41,6 @@ shift
 done
 
 # remove previous connection if already exists
-
-if [ 
-
 remove_connection "static-$INTERFACE"
 echo "Configuring ssh for Hanwha unit."
 echo "Using Static IPv4 address: $STATIC_IP"
