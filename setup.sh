@@ -6,7 +6,7 @@ remove_connection() {
     CUR_CON=$(nmcli -t device | grep "$1")
     CUR_CON=${CUR_CON##*:}
 
-    if [ "$CUR_CON" = "static-$1" || -n "$CUR_CON" ]; then
+    if [ "$CUR_CON" = "static-$1" ] || [ -n "$CUR_CON" ]; then
         # remove the connection if exists
         nmcli con del "$CUR_CON"
     fi
