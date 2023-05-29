@@ -8,7 +8,9 @@ remove_connection() {
 
     if [ -n "$CUR_CON" ]; then
         # remove the connection if exists
-        sudo nmcli con del "$CUR_CON"
+        nmcli con del "$CUR_CON"
+        # we may lose you...
+        echo "Goodbye"
     fi
 }
 
@@ -34,11 +36,8 @@ while [ $# -gt 0 ]; do
 shift
 done
 
-echo "Configuring ssh for Hanwha unit."
+echo "Configuring static IP address on $INTERFACE for Hanwha unit."
 echo "Using Static IPv4 address: $STATIC_IP"
-
-sudo nmcli con add con-name "static-$INTERFACE" ifname "$INTERFACE" type ethernet ip4 "$STATIC_IP" gw4 "$GATEWAY"
-sudo nmcli con mod "static-$INTERFACE" ipv4.dns "$GATEWAY,$DNS_SERVER"
 
 echo "New static connection configured."
 
@@ -47,18 +46,22 @@ if [ -n "$DO_SSH_CONF" ]; then
 
     SSHD=/etc/ssh/sshd_config
     sudo sed -i 's/Port 22/Port '"$SSH_PORT"'/' $SSHD
-    sudo sed -i '/Port '"$SSH_PORT"'/s/^#//g' $SSHD # remove '#', if Port conf is disabled
+    sudo sed -i '/Port'"$SSH_PORT"'/s/^#//g' $SSHD # remove '#', if Port conf is disabled
 
     echo "ssh now on port $SSH_PORT"
 fi
 
 echo "Restarting ssh, Removing previous connection and bringing static connection up..."
-echo -e "\033[31;1mWARNING\033[0m You may immediately lose connection to host!"
+echo "\033[31;1mWARNING\033[0m You may immediately lose connection to host!"
 echo "ping $STATIC_IP to verify interface is UP and that process has completed succesfully."
-echo "Goodbye"
 
 remove_connection "$INTERFACE"
+
+sudo nmcli con add con-name "static-$INTERFACE" ifname "$INTERFACE" type ethernet ip4 "$STATIC_IP" gw4 "$GATEWAY"
+sudo nmcli con mod "static-$INTERFACE" ipv4.dns "$GATEWAY,$DNS_SERVER"
 sudo nmcli con up "static-$INTERFACE" iface "$INTERFACE"
 sudo systemctl restart ssh
+
+echo "\e[32mConfiguration Complete\e[0m"
 
 exit 0
