@@ -46,10 +46,6 @@ echo "Using Static IPv4 address: $STATIC_IP"
 nmcli con add con-name "static-$INTERFACE" ifname "$INTERFACE" type ethernet ip4 "$STATIC_IP" gw4 "$GATEWAY"
 nmcli con mod "static-$INTERFACE" ipv4.dns "$GATEWAY,$DNS_SERVER"
 
-echo "Removing previous connection(s) and bringing static connection up..."
-remove_connection "$INTERFACE"
-nmcli con up "static-$INTERFACE" iface "$INTERFACE"
-
 echo "New static connection configured."
 
 if [ -n "$DO_SSH_CONF" ]; then
@@ -60,8 +56,15 @@ if [ -n "$DO_SSH_CONF" ]; then
     sed -i '/Port'"$SSH_PORT"'/s/^#//g' $SSHD # remove '#', if Port conf is disabled
 
     echo "ssh now on port $SSH_PORT"
-    echo "Restarting ssh"
-    systemctl restart ssh
 fi
+
+echo "Restarting ssh, Removing previous connection and bringing static connection up..."
+echo "You may immediately lose connection to host."
+echo "ping $STATIC_IP to verify interface is UP and that process has completed succesfully."
+echo "Goodbye"
+
+remove_connection "$INTERFACE"
+nmcli con up "static-$INTERFACE" iface "$INTERFACE"
+systemctl restart ssh
 
 exit 0
