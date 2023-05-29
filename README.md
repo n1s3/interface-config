@@ -1,6 +1,12 @@
 # How to use this script
 
-execute the following command from within the shell of the system that is to be configured.  
+### SSH configuration
+
+You may need to change the default port for ssh on the NVR. This is beacuse the router also checks for incoming ssh connections on port 22. Either change the ssh port on the router from 22, or use this script to change the NVR ssh port from 22. Supply --ssh as an argument and this script will automaticaly change the ssh port to 23. Use --port to change the port to a value other than 23.
+
+### Using the script
+
+Execute the following command from within the shell of the system that is to be configured.  
 This can be done remotely with an active ssh connection, however the connection will drop while executing this script.
 
     curl -sSL https://raw.githubusercontent.com/n1s3/interface-config/master/setup.sh | sh
