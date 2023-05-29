@@ -2,6 +2,16 @@
 
 set -e
 
+remove_connection() {
+    CUR_CON=$(nmcli -t device | grep "$1")
+    CUR_CON=${CUR_CON##*:}
+
+    if [ "$CUR_CON" = "static-$1" || -n "$CUR_CON" ]; then
+        # remove the connection if exists
+        nmcli con del "$CUR_CON"
+    fi
+}
+
 if [ $(id -u) -ne 0 ]; then
     echo "Root privledges are required."
     echo "You must run this script as root."
@@ -30,22 +40,24 @@ while [ $# -gt 0 ]; do
 shift
 done
 
+# remove previous connection if already exists
+
+if [ 
+
+remove_connection "static-$INTERFACE"
 echo "Configuring ssh for Hanwha unit."
 echo "Using Static IPv4 address: $STATIC_IP"
 
 nmcli con add con-name "static-$INTERFACE" ifname "$INTERFACE" type ethernet ip4 "$STATIC_IP" gw4 "$GATEWAY"
 nmcli con mod "static-$INTERFACE" ipv4.dns "$GATEWAY,$DNS_SERVER"
 
-echo "Remove previous connection and bringing static connection up..."
-CUR_CON=$(nmcli con show | grep "$INTERFACE")
-CUR_CON=${CUR_CON##*:}
-
-nmcli con del "$CUR_CON"
+echo "Removing previous connection(s) and bringing static connection up..."
+remove_connection "$INTERFACE"
 nmcli con up "static-$INTERFACE" iface "$INTERFACE"
 
 echo "New static connection configured."
 
-if [ -z "$DO_SSH_CONF" ]; then
+if [ -n "$DO_SSH_CONF" ]; then
     echo "Setting up ssh..."
 
     SSHD=/etc/ssh/sshd_config
