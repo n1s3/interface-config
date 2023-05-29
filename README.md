@@ -4,6 +4,12 @@ execute the following command from within the shell of the system that is to be 
 This can be done remotely with an active ssh connection, however the connection will drop while executing this script.
 
     curl -sSL https://raw.githubusercontent.com/n1s3/interface-config/master/setup.sh | sh
+    
+If you need to specify any arguments to the script, this can be done like so.
+
+    curl -sSL https://raw.githubusercontent.com/n1s3/interface-config/master/setup.sh | sh -s -- --ssh -p 23 -i eth1
+ 
+ You may specify any arguments you wish, just supply each arg following the '--' double dash.
 
 ## Interface config
 
