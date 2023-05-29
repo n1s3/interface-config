@@ -47,7 +47,7 @@ if [ -n "$DO_SSH_CONF" ]; then
 
     SSHD=/etc/ssh/sshd_config
     sudo sed -i 's/Port 22/Port '"$SSH_PORT"'/' $SSHD
-    sudo sed -i '/Port'"$SSH_PORT"'/s/^#//g' $SSHD # remove '#', if Port conf is disabled
+    sudo sed -i '/Port '"$SSH_PORT"'/s/^#//g' $SSHD # remove '#', if Port conf is disabled
 
     echo "ssh now on port $SSH_PORT"
 fi
