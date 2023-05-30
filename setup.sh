@@ -60,7 +60,7 @@ remove_connection "$INTERFACE"
 sudo nmcli con add con-name "static-$INTERFACE" ifname "$INTERFACE" type ethernet ip4 "$STATIC_IP" gw4 "$GATEWAY"
 sudo nmcli con mod "static-$INTERFACE" ipv4.dns "$GATEWAY,$DNS_SERVER"
 sudo nmcli con up "static-$INTERFACE" iface "$INTERFACE"
-sudo systemctl restart ssh
+sudo systemctl restart sshd
 
 echo "\e[32mConfiguration Complete\e[0m"
 
